@@ -30,12 +30,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragmentSchedule).commitAllowingStateLoss();
 
-
+        //하단바
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                switch (menuItem.getItemId()) {
+                //각 아이콘 클릭하면 Fragment 전환환
+               switch (menuItem.getItemId()) {
                     case R.id.todo: {
                         fragmentTransaction.replace(R.id.frameLayout, fragmentTodo).commitAllowingStateLoss();
                         return true;
