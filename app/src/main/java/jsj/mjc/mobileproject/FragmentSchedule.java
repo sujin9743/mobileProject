@@ -28,6 +28,8 @@ import androidx.fragment.app.Fragment;
 
 import android.view.*;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class FragmentSchedule extends Fragment {
 
     TextView dateTxt, dateTxt_picker;
@@ -36,6 +38,7 @@ public class FragmentSchedule extends Fragment {
     DatePicker datePicker;
     LinearLayout date_layout;
     ConstraintLayout datePicker_layout;
+    FloatingActionButton sch_floatingBtn;
 
     @Nullable
     @Override
@@ -78,6 +81,15 @@ public class FragmentSchedule extends Fragment {
         //todo 6. DatePicker로 년, 월 클릭 시 해당 날짜의 캘린더로 변경
 
         //todo 7. floatingActionButton 클릭 시 일정 추가 Activity 출력
+        sch_floatingBtn = view.findViewById(R.id.sch_floatingBtn);
+
+        sch_floatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AddScheduleActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //todo 8. 일정 추가 시 schedule_rcV에 출력
 
