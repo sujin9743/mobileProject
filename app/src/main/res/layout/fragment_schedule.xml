@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,9 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/date_Layout"
+        android:id="@+id/date_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:background="@color/appColor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -16,9 +16,9 @@
             android:id="@+id/dateTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="30dp"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:clickable="true"
@@ -28,25 +28,99 @@
             android:id="@+id/dateBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/ic_expand_more_black_24dp"
             app:layout_constraintLeft_toRightOf="@id/dateTxt"
             app:layout_constraintTop_toTopOf="parent"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/datePicker_Layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/calendar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_Layout"
-        android:gravity="center">
-        <DatePicker
+        app:layout_constraintTop_toBottomOf="@id/date_layout">
+        <CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/CalendarViewTheme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/datePicker_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/appColor"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/dateTxt_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:clickable="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <Button
+            android:id="@+id/dateBtn_picker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/ic_expand_less_black_24dp"
+            app:layout_constraintLeft_toRightOf="@id/dateTxt_picker"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:datePickerMode="spinner"
-            android:calendarViewShown="false"/>
-    </LinearLayout>
+            android:calendarViewShown="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateTxt_picker"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calendar_layout">
+
+        <TextView
+            android:id="@+id/scheduleTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="06.10"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/schedule_rcV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
