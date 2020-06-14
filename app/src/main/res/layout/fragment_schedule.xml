@@ -35,22 +35,14 @@
             app:layout_constraintTop_toTopOf="parent"/>
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/calendar_layout"
+    <CalendarView
+        android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme="@style/CalendarViewTheme"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_layout">
-        <CalendarView
-            android:id="@+id/calendar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/CalendarViewTheme"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@id/date_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/datePicker_layout"
@@ -93,41 +85,32 @@
             app:layout_constraintTop_toBottomOf="@id/dateTxt_picker"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/schedule_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginLeft="30dp"
+        android:text="06.10"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calendar"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/schedule_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendar_layout">
+        app:layout_constraintTop_toBottomOf="@id/schedule_date"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/scheduleTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="06.10"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/schedule_rcV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sch_floatingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginRight="20dp"
         android:backgroundTint="@color/appColor"
         app:fabSize="mini"

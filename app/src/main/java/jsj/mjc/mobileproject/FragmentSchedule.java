@@ -19,12 +19,16 @@ import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.*;
 
@@ -39,6 +43,9 @@ public class FragmentSchedule extends Fragment {
     LinearLayout date_layout;
     ConstraintLayout datePicker_layout;
     FloatingActionButton sch_floatingBtn;
+    RecyclerView schedule_recycler;
+    ArrayList<ScheduleItem> scheduleList;
+    ScheduleAdapter scheduleAdapter;
 
     @Nullable
     @Override
@@ -48,6 +55,8 @@ public class FragmentSchedule extends Fragment {
 
         dateTxt = view.findViewById(R.id.dateTxt);
         dateBtn = view.findViewById(R.id.dateBtn);
+        //todo 0. DatePicker, CalendarView -> 현재 날짜로 셋팅
+
         //todo 1. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
         Date date = new Date();
@@ -92,6 +101,21 @@ public class FragmentSchedule extends Fragment {
         });
 
         //todo 8. 일정 추가 시 schedule_rcV에 출력
+        schedule_recycler = view.findViewById(R.id.schedule_recycler);
+        scheduleList = new ArrayList<>();
+        scheduleAdapter = new ScheduleAdapter(scheduleList);
+
+        //RecyclerView를 LinearLayout으로 지정
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        schedule_recycler.setLayoutManager(linearLayoutManager);
+        //recyclerView 구분선 추가
+        schedule_recycler.addItemDecoration(new DividerItemDecoration(schedule_recycler.getContext(), 1));
+        //임시데이터
+        for(int i=0; i<20; i++) {
+            ScheduleItem data = new ScheduleItem("일정"+i, "시간"+i);
+            scheduleList.add(data);
+        }
+        schedule_recycler.setAdapter(scheduleAdapter);
 
         //todo 9. 리사이클러뷰 슬라이딩 시 삭제 구현
 
