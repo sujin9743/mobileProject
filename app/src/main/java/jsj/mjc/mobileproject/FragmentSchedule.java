@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,15 +34,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.*;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FragmentSchedule extends Fragment {
 
-    TextView dateTxt, dateTxt_picker, schedule_date;
-    Button dateBtn, dateBtn_picker;
+    TextView dateTxt, schedule_date;
     String today_year, today_month;
-    DatePicker datePicker;
+    CalendarView calendar;
     LinearLayout date_layout;
     ConstraintLayout datePicker_layout;
     FloatingActionButton sch_floatingBtn;
@@ -48,60 +50,59 @@ public class FragmentSchedule extends Fragment {
     ArrayList<ScheduleItem> scheduleList;
     ScheduleAdapter scheduleAdapter;
 
-    String select_year, select_month, select_date;
+    int select_year, select_month, select_day;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         //View 객체에 현재 뷰를 담음
         View view =  inflater.inflate(R.layout.fragment_schedule, container, false);
 
         dateTxt = view.findViewById(R.id.dateTxt);
-        dateBtn = view.findViewById(R.id.dateBtn);
         schedule_date = view.findViewById(R.id.schedule_date);
+        sch_floatingBtn = view.findViewById(R.id.sch_floatingBtn);
+        calendar = view.findViewById(R.id.calendar);
         //todo 0. DatePicker, CalendarView -> 현재 날짜로 셋팅
 
         //todo 1. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
-        SimpleDateFormat scheduleDateFormat = new SimpleDateFormat("MM.dd");
-        Date date = new Date();
-        dateTxt.setText(dateFormat.format(date));
-        schedule_date.setText(scheduleDateFormat.format(date));
-
-        dateTxt_picker = view.findViewById(R.id.dateTxt_picker);
-        dateBtn_picker = view.findViewById(R.id.dateBtn_picker);
-
-        //todo 2. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
-        dateTxt_picker.setText(dateFormat.format(date));
-
-        //todo 3. date_layout 클릭 시 datePickerActivity 출력
-        datePicker_layout = view.findViewById(R.id.datePicker_layout);
-        dateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePicker_layout.setVisibility(View.VISIBLE);
-            }
-        });
-        dateBtn_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    datePicker_layout.setVisibility(View.INVISIBLE);
-            }
-        });
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        select_year = Integer.parseInt(yearFormat.format(date));
+        select_month = Integer.parseInt(monthFormat.format(date));
+        select_day = Integer.parseInt(dayFormat.format(date));
+        changeDate(select_year, select_month, select_day);
 
         //todo 4. 캘린더에서 선택한 월, 일, 요일 scheduleTxt(TextView)에 출력
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                select_year = year; select_month = month+1; select_day = dayOfMonth;
+                changeDate(select_year, select_month, select_day);
+                //todo 7. floatingActionButton 클릭 시 일정 추가 Activity 출력
+                sch_floatingBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), AddScheduleActivity.class);
+                        intent.putExtra("select_year", select_year);
+                        intent.putExtra("select_month", select_month);
+                        intent.putExtra("select_day", select_day);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
 
-        //todo 5. DatePicker로 날짜 클릭 시 선택한 년,월 dateTxt, dateTxt_picker에 출력
-
-        //todo 6. DatePicker로 년, 월 클릭 시 해당 날짜의 캘린더로 변경
-
-        //todo 7. floatingActionButton 클릭 시 일정 추가 Activity 출력
-        sch_floatingBtn = view.findViewById(R.id.sch_floatingBtn);
-
+        //캘린터뷰 날짜 변경하지 않고 floatingBtn 눌렀을 때
         sch_floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddScheduleActivity.class);
+                intent.putExtra("select_year", select_year);
+                intent.putExtra("select_month", select_month);
+                intent.putExtra("select_day", select_day);
                 startActivity(intent);
             }
         });
@@ -128,5 +129,22 @@ public class FragmentSchedule extends Fragment {
         //todo 10. 리사이클러뷰 해당 리스트 클릭 시 일정 조회 및 수정
 
        return view;
+    }
+
+    void changeDate(int select_year, int select_month, int select_day) {
+        if(select_month < 10 && select_day <10) {
+            dateTxt.setText(select_year + ".0" + select_month + ".0" + select_day);
+            schedule_date.setText("0" + select_month + ".0" + select_day);
+        } else if(select_month < 10) {
+            dateTxt.setText(select_year + ".0" + select_month + "." + select_day);
+            schedule_date.setText("0" + select_month + "." + select_day);
+        } else if(select_day < 10) {
+            dateTxt.setText(select_year + "." + select_month + ".0" + select_day);
+            schedule_date.setText(select_month + ".0" + select_day);
+        }
+        else {
+            dateTxt.setText(select_year + "." + select_month + "." + select_day);
+            schedule_date.setText(select_month + "." + select_day);
+        }
     }
 }

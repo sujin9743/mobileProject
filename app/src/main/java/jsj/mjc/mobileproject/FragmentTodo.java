@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -35,7 +36,9 @@ public class FragmentTodo extends Fragment {
     FloatingActionButton todo_floatingBtn;
     View dialog;
     EditText todoEdt;
+    DatePicker datePicker_todo;
 
+    int select_year, select_month, select_day;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,19 +47,20 @@ public class FragmentTodo extends Fragment {
 
         dateTxt_todo = view.findViewById(R.id.dateTxt_todo);
         dateBtn_todo = view.findViewById(R.id.dateBtn_todo);
+        dateTxt_picker_todo = view.findViewById(R.id.dateTxt_picker_todo);
+        dateBtn_picker_todo = view.findViewById(R.id.dateBtn_picker_todo);
+        datePicker_layout_todo = view.findViewById(R.id.datePicker_layout_todo);
+        todo_floatingBtn = view.findViewById(R.id.todo_floatingBtn);
+        datePicker_todo = view.findViewById(R.id.datePicker_todo);
         //todo 1. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         SimpleDateFormat dateFormatFull = new SimpleDateFormat("yyyy.MM.dd");
         Date date = new Date();
         dateTxt_todo.setText(dateFormatFull.format(date));
 
-        dateTxt_picker_todo = view.findViewById(R.id.dateTxt_picker_todo);
-        dateBtn_picker_todo = view.findViewById(R.id.dateBtn_picker_todo);
-
         //todo 2. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         dateTxt_picker_todo.setText(dateFormatFull.format(date));
 
         //todo 3. dateBtn 클릭 시 datePickerActivity 출력
-        datePicker_layout_todo = view.findViewById(R.id.datePicker_layout_todo);
         dateBtn_todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +71,15 @@ public class FragmentTodo extends Fragment {
             @Override
             public void onClick(View v) {
                 datePicker_layout_todo.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //datePicker 선택 시 날짜 변경
+        datePicker_todo.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                select_year = year; select_month = monthOfYear+1; select_day = dayOfMonth;
+                changeDate(select_year, select_month, select_day);
             }
         });
 
@@ -88,7 +101,6 @@ public class FragmentTodo extends Fragment {
         todo_recycler.setAdapter(todoAdapter);
 
         //todo 5.floatingButton누르면 todo 추가 Dialog
-        todo_floatingBtn = view.findViewById(R.id.todo_floatingBtn);
         todo_floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,5 +128,21 @@ public class FragmentTodo extends Fragment {
             }
         });
         return view;
+    }
+    void changeDate(int select_year, int select_month, int select_day) {
+        if(select_month < 10 && select_day <10) {
+            dateTxt_todo.setText(select_year + ".0" + select_month + ".0" + select_day);
+            dateTxt_picker_todo.setText(select_year + ".0" + select_month + ".0" + select_day);
+        } else if(select_month < 10) {
+            dateTxt_todo.setText(select_year + ".0" + select_month + "." + select_day);
+            dateTxt_picker_todo.setText(select_year + ".0" + select_month + "." + select_day);
+        } else if(select_day < 10) {
+            dateTxt_todo.setText(select_year + "." + select_month + ".0" + select_day);
+            dateTxt_picker_todo.setText(select_year + "." + select_month + ".0" + select_day);
+        }
+        else {
+            dateTxt_todo.setText(select_year + "." + select_month + "." + select_day);
+            dateTxt_picker_todo.setText(select_year + "." + select_month + "." + select_day);
+        }
     }
 }
