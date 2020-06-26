@@ -45,7 +45,6 @@ public class FragmentTodo extends Fragment {
         dateTxt_todo = view.findViewById(R.id.dateTxt_todo);
         dateBtn_todo = view.findViewById(R.id.dateBtn_todo);
         //todo 1. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
         SimpleDateFormat dateFormatFull = new SimpleDateFormat("yyyy.MM.dd");
         Date date = new Date();
         dateTxt_todo.setText(dateFormatFull.format(date));
@@ -56,15 +55,15 @@ public class FragmentTodo extends Fragment {
         //todo 2. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         dateTxt_picker_todo.setText(dateFormatFull.format(date));
 
-        //todo 3. dateText 클릭 시 datePickerActivity 출력
+        //todo 3. dateBtn 클릭 시 datePickerActivity 출력
         datePicker_layout_todo = view.findViewById(R.id.datePicker_layout_todo);
-        dateTxt_todo.setOnClickListener(new View.OnClickListener() {
+        dateBtn_todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePicker_layout_todo.setVisibility(View.VISIBLE);
             }
         });
-        dateTxt_picker_todo.setOnClickListener(new View.OnClickListener() {
+        dateBtn_picker_todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePicker_layout_todo.setVisibility(View.INVISIBLE);

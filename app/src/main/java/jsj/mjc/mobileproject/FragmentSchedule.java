@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -36,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FragmentSchedule extends Fragment {
 
-    TextView dateTxt, dateTxt_picker;
+    TextView dateTxt, dateTxt_picker, schedule_date;
     Button dateBtn, dateBtn_picker;
     String today_year, today_month;
     DatePicker datePicker;
@@ -47,6 +48,8 @@ public class FragmentSchedule extends Fragment {
     ArrayList<ScheduleItem> scheduleList;
     ScheduleAdapter scheduleAdapter;
 
+    String select_year, select_month, select_date;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,12 +58,15 @@ public class FragmentSchedule extends Fragment {
 
         dateTxt = view.findViewById(R.id.dateTxt);
         dateBtn = view.findViewById(R.id.dateBtn);
+        schedule_date = view.findViewById(R.id.schedule_date);
         //todo 0. DatePicker, CalendarView -> 현재 날짜로 셋팅
 
         //todo 1. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM");
+        SimpleDateFormat scheduleDateFormat = new SimpleDateFormat("MM.dd");
         Date date = new Date();
         dateTxt.setText(dateFormat.format(date));
+        schedule_date.setText(scheduleDateFormat.format(date));
 
         dateTxt_picker = view.findViewById(R.id.dateTxt_picker);
         dateBtn_picker = view.findViewById(R.id.dateBtn_picker);
@@ -68,7 +74,7 @@ public class FragmentSchedule extends Fragment {
         //todo 2. 현재 년, 월 가져와서 date_layout dateTxt(TextView)에 출력
         dateTxt_picker.setText(dateFormat.format(date));
 
-        //todo 3. dateText 클릭 시 datePickerActivity 출력
+        //todo 3. date_layout 클릭 시 datePickerActivity 출력
         datePicker_layout = view.findViewById(R.id.datePicker_layout);
         dateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
